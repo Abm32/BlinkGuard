@@ -2,10 +2,14 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "outDir": "./dist",
-    "rootDir": "./src",
     "module": "ES2022",
     "target": "ES2022",
-    "types": ["node"]
+    "types": ["node"],
+    "skipLibCheck": true,
+    "baseUrl": "..",
+    "paths": {
+      "../../shared/*": ["shared/*"]
+    }
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]

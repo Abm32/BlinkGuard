@@ -2,8 +2,12 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "outDir": "./dist",
-    "rootDir": "./src",
-    "types": ["chrome", "node"]
+    "types": ["chrome", "node"],
+    "skipLibCheck": true,
+    "baseUrl": "..",
+    "paths": {
+      "../../shared/*": ["shared/*"]
+    }
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
