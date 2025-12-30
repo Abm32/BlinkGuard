@@ -1,0 +1,41 @@
+/**
+ * Styles for BlinkGuard overlays
+ */
+
+.blinkguard-overlay {
+  animation: blinkguard-fade-in 0.3s ease-in;
+}
+
+@keyframes blinkguard-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Ensure overlays are visible above Twitter content */
+[data-testid="tweet"] {
+  position: relative;
+}
+
+/* Safety level specific styles */
+.blinkguard-overlay[data-safety-level="safe"] {
+  background: #10b981 !important;
+}
+
+.blinkguard-overlay[data-safety-level="caution"] {
+  background: #f59e0b !important;
+}
+
+.blinkguard-overlay[data-safety-level="high_risk"] {
+  background: #ef4444 !important;
+}
+
+.blinkguard-overlay[data-safety-level="unknown"] {
+  background: #6b7280 !important;
+}
+

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BlinkGuard</title>
+  <style>
+    body {
+      width: 320px;
+      padding: 16px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      margin: 0;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .logo {
+      width: 24px;
+      height: 24px;
+    }
+    h1 {
+      font-size: 18px;
+      margin: 0;
+    }
+    .status {
+      padding: 8px 12px;
+      border-radius: 6px;
+      margin-bottom: 16px;
+      font-size: 14px;
+    }
+    .status.enabled {
+      background: #d1fae5;
+      color: #065f46;
+    }
+    .status.disabled {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+    .toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .switch {
+      position: relative;
+      width: 44px;
+      height: 24px;
+    }
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 24px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+    input:checked + .slider {
+      background-color: #10b981;
+    }
+    input:checked + .slider:before {
+      transform: translateX(20px);
+    }
+    .stats {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid #e5e7eb;
+      font-size: 12px;
+      color: #6b7280;
+    }
+    .link {
+      color: #3b82f6;
+      text-decoration: none;
+      font-size: 12px;
+    }
+    .link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <img src="icons/icon48.png" alt="BlinkGuard" class="logo">
+    <h1>BlinkGuard</h1>
+  </div>
+  
+  <div id="status" class="status enabled">✓ Active</div>
+  
+  <div class="toggle">
+    <label>Enable BlinkGuard</label>
+    <label class="switch">
+      <input type="checkbox" id="enabled" checked>
+      <span class="slider"></span>
+    </label>
+  </div>
+  
+  <div class="toggle">
+    <label>Show Safety Overlays</label>
+    <label class="switch">
+      <input type="checkbox" id="showOverlays" checked>
+      <span class="slider"></span>
+    </label>
+  </div>
+  
+  <div class="stats">
+    <div>Protecting your Solana transactions</div>
+    <div style="margin-top: 8px;">
+      <a href="https://github.com/blinkguard/blinkguard" target="_blank" class="link">GitHub</a> |
+      <a href="https://blinkguard.io" target="_blank" class="link">Documentation</a>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
+
