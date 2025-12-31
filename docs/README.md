@@ -10,6 +10,7 @@ Technical documentation about architecture and implementation:
 - `TECHNICAL_ARCHITECTURE.md` - Detailed technical implementation
 - `API_REQUEST_FLOW.md` - API request flow documentation
 - `BLINK_DETECTION_FLOW.md` - Blink detection process documentation
+- `SIMULATION_IMPLEMENTATION.md` - Transaction simulation implementation details
 
 ### `/guides`
 User and developer guides:
@@ -25,9 +26,7 @@ Development and debugging documentation:
 - `TESTING_GUIDE.md` - Testing guide
 
 ### Root Docs
-- `PROJECT_SUMMARY.md` - Project overview and summary
-- `GRANT_APPLICATION_NOTES.md` - Grant application notes
-- `NEXT_STEPS.md` - Future development plans
+- `README.md` - This file (documentation index)
 
 ## 🚀 Quick Links
 
