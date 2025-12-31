@@ -16,6 +16,8 @@
     "https://*.dialect.to/*",
     "https://*.solana.com/*",
     "https://api.mainnet-beta.solana.com/*",
+    "https://blink-guard-ixk2a1whf-abm32s-projects.vercel.app/*",
+    "https://*.vercel.app/*",
     "http://localhost:3000/*"
   ],
   "background": {

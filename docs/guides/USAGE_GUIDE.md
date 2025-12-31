@@ -143,7 +143,9 @@ When scrolling through your feed:
 
 ### Configure API URL (Advanced)
 
-By default, BlinkGuard uses `http://localhost:3000`. To change:
+By default, BlinkGuard uses the Vercel deployment at `https://blink-guard-ixk2a1whf-abm32s-projects.vercel.app`. 
+
+To use a local API or change the URL:
 
 1. Open service worker console
 2. Run:

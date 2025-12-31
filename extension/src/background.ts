@@ -170,7 +170,7 @@ async function syncRegistry() {
     // Get API URL from storage
     const apiUrl = await new Promise<string>((resolve) => {
       chrome.storage.local.get(['apiUrl'], (result) => {
-        resolve(result.apiUrl || 'http://localhost:3000');
+        resolve(result.apiUrl || 'https://blink-guard-ixk2a1whf-abm32s-projects.vercel.app');
       });
     });
     

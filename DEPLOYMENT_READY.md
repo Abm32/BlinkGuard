@@ -62,7 +62,7 @@ vercel --prod
 1. **Update Extension API URL:**
    - Update `shared/constants.ts`:
      ```typescript
-     export const DEFAULT_API_URL = 'https://your-project.vercel.app';
+     export const DEFAULT_API_URL = 'https://blink-guard-ixk2a1whf-abm32s-projects.vercel.app';
      ```
    - Or let users configure it in extension settings
 

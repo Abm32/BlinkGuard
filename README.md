@@ -96,7 +96,9 @@ npm run build:api
 node api/dist/server.js
 ```
 
-The API will run on `http://localhost:3000` by default.
+The API is deployed on Vercel at `https://blink-guard-ixk2a1whf-abm32s-projects.vercel.app`.
+
+For local development, the API can run on `http://localhost:3000`.
 
 ## 📖 Usage
 

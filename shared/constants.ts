@@ -34,5 +34,5 @@ export const SAFETY_COLORS = {
 };
 
 // API endpoint (can be overridden via extension settings)
-export const DEFAULT_API_URL = 'http://localhost:3000';
+export const DEFAULT_API_URL = 'https://blink-guard-ixk2a1whf-abm32s-projects.vercel.app';
 
