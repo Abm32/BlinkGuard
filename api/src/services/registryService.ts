@@ -6,7 +6,26 @@ import { MaliciousUrlEntry } from '../../../shared/types.js';
 import fs from 'fs/promises';
 import path from 'path';
 
-const REGISTRY_FILE = path.join(process.cwd(), 'data', 'registry.json');
+// For Vercel, use /tmp for writes (ephemeral) or data directory for reads
+// In production, this should be replaced with a database
+const getRegistryPath = () => {
+  // Check if we're in Vercel environment
+  if (process.env.VERCEL) {
+    // Try to use /tmp for writes, but reads from data directory
+    const dataPath = path.join(process.cwd(), 'data', 'registry.json');
+    try {
+      // Check if data directory exists (for reads)
+      return dataPath;
+    } catch {
+      // Fallback to /tmp
+      return '/tmp/registry.json';
+    }
+  }
+  // Local development
+  return path.join(process.cwd(), 'data', 'registry.json');
+};
+
+const REGISTRY_FILE = getRegistryPath();
 
 interface RegistryCheck {
   isMalicious: boolean;

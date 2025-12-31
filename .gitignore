@@ -34,7 +34,20 @@ npm-debug.log*
 # Environment
 .env
 .env.local
+.env.production
+.env.*.local
+
+# Secrets and keys
+*.key
+*.pem
+*.p12
+*.pfx
+secrets/
+*.secret
 
 # Temporary files
 *.tmp
 .cache/
+
+# Vercel
+.vercel

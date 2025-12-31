@@ -120,8 +120,13 @@ export async function simulateTransaction(actionUrl: string): Promise<Transactio
       };
     }
 
-    // Parse balance changes from logs
-    const balanceChanges = parseBalanceChanges(simulation.value.logs || []);
+    // Extract balance changes from simulation response
+    // Solana's simulateTransaction returns preBalances and postBalances arrays
+    const balanceChanges = extractBalanceChanges(
+      transaction,
+      simulation.value.preBalances || [],
+      simulation.value.postBalances || []
+    );
 
     return {
       success: true,
@@ -141,30 +146,69 @@ export async function simulateTransaction(actionUrl: string): Promise<Transactio
 }
 
 /**
- * Parses balance changes from simulation logs
+ * Extracts balance changes from simulation response
+ * This is the correct way: Solana's simulateTransaction returns preBalances and postBalances arrays
+ * that correspond to the accounts in the transaction
+ * 
+ * The simulation response structure:
+ * {
+ *   value: {
+ *     preBalances: [100000000000, 0, ...],  // Pre-balances in lamports
+ *     postBalances: [5000000, 99995000000, ...],  // Post-balances in lamports
+ *     accounts: [...],  // Account info (optional)
+ *     logs: [...]
+ *   }
+ * }
  */
-function parseBalanceChanges(logs: string[]): TransactionSimulation['balanceChanges'] {
+function extractBalanceChanges(
+  transaction: VersionedTransaction,
+  preBalances: number[],
+  postBalances: number[]
+): TransactionSimulation['balanceChanges'] {
   const changes: TransactionSimulation['balanceChanges'] = [];
   
-  // Solana logs contain balance change information
-  // Format: "Program log: <account> <preBalance> <postBalance>"
-  for (const log of logs) {
-    const balanceMatch = log.match(/balance:\s*(\d+)\s*->\s*(\d+)/i);
-    if (balanceMatch) {
-      const preBalance = parseInt(balanceMatch[1], 10);
-      const postBalance = parseInt(balanceMatch[2], 10);
+  // Get account keys from the transaction message
+  try {
+    const accountKeys = transaction.message.getAccountKeys();
+    
+    // Match each account with its pre and post balance
+    // The preBalances and postBalances arrays are indexed by account position in the transaction
+    // This is the "Spot the Difference" approach described in the documentation
+    for (let i = 0; i < accountKeys.length && i < preBalances.length && i < postBalances.length; i++) {
+      const account = accountKeys.get(i)?.toBase58() || `account_${i}`;
+      const preBalance = preBalances[i];
+      const postBalance = postBalances[i];
       const change = postBalance - preBalance;
       
-      // Try to extract account from log
-      const accountMatch = log.match(/account:\s*([A-Za-z0-9]{32,44})/i);
-      const account = accountMatch ? accountMatch[1] : 'unknown';
+      // Only include accounts with actual balance changes (or significant balances)
+      // This filters out program accounts and signers with no balance
+      // We include accounts with any balance > 0 or any change to catch all transfers
+      if (change !== 0 || preBalance > 0 || postBalance > 0) {
+        changes.push({
+          account,
+          preBalance,
+          postBalance,
+          change
+        });
+      }
+    }
+  } catch (error) {
+    console.warn('BlinkGuard: Error extracting account keys from transaction:', error);
+    // Fallback: create changes from arrays without account keys
+    // This still works for drainer detection (we just don't have account addresses)
+    for (let i = 0; i < preBalances.length && i < postBalances.length; i++) {
+      const preBalance = preBalances[i];
+      const postBalance = postBalances[i];
+      const change = postBalance - preBalance;
       
-      changes.push({
-        account,
-        preBalance,
-        postBalance,
-        change
-      });
+      if (change !== 0 || preBalance > 0 || postBalance > 0) {
+        changes.push({
+          account: `account_${i}`, // Fallback account identifier
+          preBalance,
+          postBalance,
+          change
+        });
+      }
     }
   }
 

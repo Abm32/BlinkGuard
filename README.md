@@ -24,6 +24,24 @@ BlinkGuard is an open-source browser extension and API service designed to "pre-
 - **Safety Analysis**: Provides transaction safety scoring
 - **Community Reporting**: Allows users to report suspicious Blinks
 
+## 🛠️ Technology Stack
+
+### Frontend/Extension
+- **Plasmo Framework**: React/TypeScript-based extension framework
+- **TailwindCSS**: Utility-first CSS framework for styling
+
+### Backend API
+- **Next.js**: Serverless Functions for API endpoints
+- **Rust (Axum)**: High-throughput transaction simulation handling (alternative implementation)
+
+### Database
+- **PostgreSQL**: Registry storage for malicious URLs and safety data
+- **Redis**: Caching layer for performance optimization
+
+### Infrastructure
+- **Helius / QuickNode**: Solana RPC providers for transaction simulation
+- **Vercel**: Hosting platform for API deployment
+
 ## 📚 Documentation
 
 All documentation is organized in the [`docs/`](./docs/) directory:

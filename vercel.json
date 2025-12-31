@@ -1,0 +1,33 @@
+{
+  "version": 2,
+  "buildCommand": "npm run build:shared:api",
+  "outputDirectory": ".",
+  "functions": {
+    "api/**/*.ts": {
+      "runtime": "@vercel/node"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/api/health",
+      "destination": "/api/health"
+    },
+    {
+      "source": "/api/registry/check",
+      "destination": "/api/registry/check"
+    },
+    {
+      "source": "/api/registry/latest",
+      "destination": "/api/registry/latest"
+    },
+    {
+      "source": "/api/registry/report",
+      "destination": "/api/registry/report"
+    },
+    {
+      "source": "/api/analyze",
+      "destination": "/api/analyze"
+    }
+  ]
+}
+
