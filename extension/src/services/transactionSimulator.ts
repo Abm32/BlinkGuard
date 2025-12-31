@@ -3,7 +3,7 @@
  */
 
 import { Connection, VersionedTransaction } from '@solana/web3.js';
-import { TransactionSimulation } from '../../../shared/types';
+import { TransactionSimulation } from '../../../shared/types.js';
 
 let connection: Connection | null = null;
 
@@ -30,33 +30,60 @@ function getConnection(): Connection {
  */
 async function fetchTransaction(actionUrl: string): Promise<VersionedTransaction | null> {
   try {
-    // POST to action URL to get transaction
-    const response = await fetch(actionUrl, {
-      method: 'POST',
+    // Try GET first (some Solana Action APIs support it)
+    let response = await fetch(actionUrl, {
+      method: 'GET',
       headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        // Standard Solana Action API request
-      })
-    });
+        'Accept': 'application/json'
+      }
+    }).catch(() => null);
+    
+    // If GET fails or returns error, try POST
+    if (!response || !response.ok) {
+      response = await fetch(actionUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          account: null // Some APIs require this field
+        })
+      });
+    }
 
     if (!response.ok) {
-      throw new Error(`Failed to fetch transaction: ${response.statusText}`);
+      const statusText = response.statusText || `HTTP ${response.status}`;
+      let errorBody = '';
+      try {
+        errorBody = await response.text();
+      } catch {
+        // Ignore if can't read body
+      }
+      throw new Error(`Failed to fetch transaction: ${statusText}${errorBody ? ` - ${errorBody.substring(0, 100)}` : ''}`);
     }
 
     const data = await response.json();
     
-    // Parse transaction from response
-    // Format depends on Action API spec
+    // Handle different response formats
     if (data.transaction) {
       const txBuffer = Buffer.from(data.transaction, 'base64');
       return VersionedTransaction.deserialize(txBuffer);
+    } else if (data.body) {
+      // Some APIs return transaction in 'body' field
+      const txBuffer = Buffer.from(data.body, 'base64');
+      return VersionedTransaction.deserialize(txBuffer);
+    } else if (typeof data === 'string') {
+      // Some APIs return base64 string directly
+      const txBuffer = Buffer.from(data, 'base64');
+      return VersionedTransaction.deserialize(txBuffer);
     }
 
+    console.warn('BlinkGuard: Transaction data not found in response format:', Object.keys(data));
     return null;
   } catch (error) {
-    console.error('Error fetching transaction:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    console.error('BlinkGuard: Error fetching transaction from', actionUrl, ':', errorMessage);
     return null;
   }
 }

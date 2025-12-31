@@ -2,7 +2,19 @@
  * Registry service for malicious URL tracking
  */
 
-import { MaliciousUrlEntry } from '../../../shared/types';
+import { MaliciousUrlEntry } from '../../../shared/types.js';
+import { DEFAULT_API_URL } from '../../../shared/constants.js';
+
+/**
+ * Gets the API URL from storage or returns default
+ */
+async function getApiUrl(): Promise<string> {
+  return new Promise((resolve) => {
+    chrome.storage.local.get(['apiUrl'], (result) => {
+      resolve(result.apiUrl || DEFAULT_API_URL);
+    });
+  });
+}
 
 interface RegistryCheck {
   isMalicious: boolean;
@@ -22,7 +34,8 @@ export async function checkUrlInRegistry(url: string): Promise<RegistryCheck> {
     }
 
     // Then check remote API
-    const response = await fetch(`https://api.blinkguard.io/registry/check?url=${encodeURIComponent(url)}`);
+    const apiUrl = await getApiUrl();
+    const response = await fetch(`${apiUrl}/registry/check?url=${encodeURIComponent(url)}`);
     if (response.ok) {
       const data = await response.json();
       if (data.isMalicious) {
@@ -121,7 +134,8 @@ export async function reportMaliciousUrl(data: {
 }): Promise<void> {
   try {
     // Submit to API
-    const response = await fetch('https://api.blinkguard.io/registry/report', {
+    const apiUrl = await getApiUrl();
+    const response = await fetch(`${apiUrl}/registry/report`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

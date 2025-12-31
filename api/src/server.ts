@@ -5,9 +5,9 @@
 
 import express from 'express';
 import cors from 'cors';
-import { MaliciousUrlEntry, SafetyAnalysis } from '../../shared/types';
-import { checkUrlInRegistry, addMaliciousUrl, getRegistry } from './services/registryService';
-import { analyzeTransaction } from './services/safetyService';
+import { MaliciousUrlEntry, SafetyAnalysis } from '../../shared/types.js';
+import { checkUrlInRegistry, addMaliciousUrl, getRegistry } from './services/registryService.js';
+import { analyzeTransaction } from './services/safetyService.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -28,7 +28,9 @@ app.get('/registry/check', async (req, res) => {
       return res.status(400).json({ error: 'URL parameter required' });
     }
 
+    console.log(`[${new Date().toISOString()}] Registry check requested for: ${url}`);
     const result = await checkUrlInRegistry(url);
+    console.log(`[${new Date().toISOString()}] Registry check result:`, result.isMalicious ? 'MALICIOUS' : 'SAFE');
     res.json(result);
   } catch (error) {
     console.error('Registry check error:', error);
@@ -38,7 +40,9 @@ app.get('/registry/check', async (req, res) => {
 
 app.get('/registry/latest', async (req, res) => {
   try {
+    console.log(`[${new Date().toISOString()}] Registry sync requested`);
     const registry = await getRegistry();
+    console.log(`[${new Date().toISOString()}] Returning ${registry.length} registry entries`);
     res.json(registry);
   } catch (error) {
     console.error('Registry fetch error:', error);
@@ -54,6 +58,7 @@ app.post('/registry/report', async (req, res) => {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
+    console.log(`[${new Date().toISOString()}] Malicious URL reported: ${url} by ${reportedBy}`);
     const entry: MaliciousUrlEntry = {
       url,
       domain: new URL(url).hostname,
@@ -64,6 +69,7 @@ app.post('/registry/report', async (req, res) => {
     };
 
     await addMaliciousUrl(entry);
+    console.log(`[${new Date().toISOString()}] URL added to registry`);
     res.json({ success: true, entry });
   } catch (error) {
     console.error('Report error:', error);

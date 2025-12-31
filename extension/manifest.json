@@ -6,14 +6,17 @@
   "permissions": [
     "storage",
     "activeTab",
-    "scripting"
+    "scripting",
+    "alarms"
   ],
   "host_permissions": [
     "https://twitter.com/*",
     "https://x.com/*",
+    "https://dial.to/*",
+    "https://*.dialect.to/*",
     "https://*.solana.com/*",
     "https://api.mainnet-beta.solana.com/*",
-    "https://*.dialect.to/*"
+    "http://localhost:3000/*"
   ],
   "background": {
     "service_worker": "background.js",
@@ -23,7 +26,9 @@
     {
       "matches": [
         "https://twitter.com/*",
-        "https://x.com/*"
+        "https://x.com/*",
+        "https://dial.to/*",
+        "https://*.dialect.to/*"
       ],
       "js": ["content.js"],
       "css": ["content.css"],

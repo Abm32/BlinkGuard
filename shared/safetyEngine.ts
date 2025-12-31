@@ -3,8 +3,8 @@
  * Shared between extension and API
  */
 
-import { SafetyLevel, SafetyAnalysis, SafetyFlag, TransactionSimulation } from './types';
-import { DRAINER_THRESHOLD, HIGH_TRANSFER_THRESHOLD, CAUTION_THRESHOLD } from './constants';
+import { SafetyLevel, SafetyAnalysis, SafetyFlag, TransactionSimulation } from './types.js';
+import { DRAINER_THRESHOLD, HIGH_TRANSFER_THRESHOLD, CAUTION_THRESHOLD } from './constants.js';
 
 /**
  * Analyzes transaction safety based on simulation results
@@ -16,6 +16,27 @@ export async function analyzeTransactionSafety(
   const flags: SafetyFlag[] = [];
   const reasons: string[] = [];
   let score = 100;
+
+  // Check 0: If simulation failed, we can't verify safety
+  if (!simulation.success || simulation.error) {
+    flags.push({
+      type: 'unknown_contract',
+      severity: 'medium',
+      description: 'Transaction simulation failed - unable to verify safety'
+    });
+    reasons.push(`Simulation failed: ${simulation.error || 'Unknown error'}`);
+    score -= 30; // Significant penalty for failed simulation
+    
+    // If we can't simulate, we can't verify it's safe
+    // Default to CAUTION or UNKNOWN instead of SAFE
+    return {
+      level: SafetyLevel.UNKNOWN,
+      score: Math.max(0, Math.min(100, score)),
+      flags,
+      reasons,
+      transactionSimulation: simulation
+    };
+  }
 
   // Check 1: Balance transfer analysis
   const balanceAnalysis = analyzeBalanceTransfers(simulation.balanceChanges);

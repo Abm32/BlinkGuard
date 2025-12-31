@@ -2,8 +2,8 @@
  * UI injection utilities for safety overlays
  */
 
-import { SafetyLevel } from '../../../shared/types';
-import { SAFETY_COLORS } from '../../../shared/constants';
+import { SafetyLevel } from '../../../shared/types.js';
+import { SAFETY_COLORS } from '../../../shared/constants.js';
 
 const OVERLAY_CLASS = 'blinkguard-overlay';
 const OVERLAY_ID_PREFIX = 'blinkguard-';

@@ -2,7 +2,7 @@
  * Registry service for managing malicious URL database
  */
 
-import { MaliciousUrlEntry } from '../../../shared/types';
+import { MaliciousUrlEntry } from '../../../shared/types.js';
 import fs from 'fs/promises';
 import path from 'path';
 

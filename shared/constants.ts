@@ -33,3 +33,6 @@ export const SAFETY_COLORS = {
   unknown: '#6b7280' // gray
 };
 
+// API endpoint (can be overridden via extension settings)
+export const DEFAULT_API_URL = 'http://localhost:3000';
+

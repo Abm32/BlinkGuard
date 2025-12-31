@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "build": "npm run build:extension && npm run build:api",
-    "build:extension": "npm run build:shared && tsc -p extension/tsconfig.json && node extension/build.js",
+    "build:extension": "npm run build:shared && tsc -p extension/tsconfig.json && node extension/bundle-content.js && node extension/build.js",
+    "build:content": "node extension/bundle-content.js",
     "build:shared": "tsc shared/*.ts --outDir extension/dist/shared --module ES2022 --target ES2022 --moduleResolution node --esModuleInterop --skipLibCheck",
     "build:api": "npm run build:shared:api && tsc -p api/tsconfig.json",
     "build:shared:api": "tsc shared/*.ts --outDir api/dist/shared --module ES2022 --target ES2022 --moduleResolution node --esModuleInterop --skipLibCheck",
@@ -28,8 +29,8 @@
   "dependencies": {
     "@solana/web3.js": "^1.95.4",
     "bs58": "^6.0.0",
-    "express": "^4.18.2",
-    "cors": "^2.8.5"
+    "cors": "^2.8.5",
+    "express": "^4.18.2"
   },
   "devDependencies": {
     "@types/chrome": "^0.0.268",
@@ -38,9 +39,9 @@
     "@types/node": "^20.14.0",
     "@typescript-eslint/eslint-plugin": "^7.0.0",
     "@typescript-eslint/parser": "^7.0.0",
+    "esbuild": "0.19.12",
     "eslint": "^8.57.0",
     "typescript": "^5.4.5",
     "vitest": "^1.6.0"
   }
 }
-

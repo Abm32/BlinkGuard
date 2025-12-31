@@ -16,6 +16,7 @@ const distDir = join(extensionDir, 'dist');
 const srcDir = join(extensionDir, 'src');
 
 // Function to recursively move files
+// Exclude content.js as it's bundled separately
 function moveFiles(src, dest) {
   if (!existsSync(src)) return;
   
@@ -30,7 +31,8 @@ function moveFiles(src, dest) {
         mkdirSync(destPath, { recursive: true });
       }
       moveFiles(srcPath, destPath);
-    } else {
+    } else if (entry !== 'content.js') {
+      // Don't overwrite bundled content.js
       copyFileSync(srcPath, destPath);
     }
   }
@@ -48,6 +50,19 @@ if (existsSync(nestedSrc)) {
   moveFiles(nestedSrc, distDir);
   // Clean up nested directories
   execSync(`rm -rf ${join(distDir, 'extension')}`, { stdio: 'inherit' });
+}
+
+// Don't overwrite bundled content.js - it's already bundled
+// Remove the TypeScript-compiled content.js if it exists (bundler creates the final one)
+const tsContentJs = join(distDir, 'content.js');
+if (existsSync(tsContentJs)) {
+  // Check if it has imports (TypeScript output) vs bundled (no imports)
+  const content = readFileSync(tsContentJs, 'utf-8');
+  if (content.includes('import ') && !content.includes('(function() {')) {
+    // This is TypeScript output, remove it (bundler already created the bundled version)
+    // Actually, bundler should have overwritten it, but let's be safe
+    console.log('Note: content.js should be bundled (no imports)');
+  }
 }
 
 // Copy manifest
@@ -84,16 +99,22 @@ if (existsSync(iconsDir)) {
 }
 
 // Fix import paths in compiled JS files to use ./shared/ instead of ../../shared/
+// Preserve .js extensions (only add if not already present)
+// Skip content.js as it's already bundled
 console.log('Fixing import paths...');
-const jsFiles = readdirSync(distDir).filter(f => f.endsWith('.js'));
+const jsFiles = readdirSync(distDir).filter(f => f.endsWith('.js') && f !== 'content.js');
 jsFiles.forEach(file => {
   const filePath = join(distDir, file);
   const content = readFileSync(filePath, 'utf-8');
-  const fixed = content.replace(/from\s+['"]\.\.\/\.\.\/shared\//g, "from '../shared/");
+  // Fix paths - add .js only if not already present
+  let fixed = content.replace(/from\s+['"]\.\.\/\.\.\/shared\/([^'"]+?)(\.js)?(['"])/g, (match, p1, p2, p3) => {
+    return `from '../shared/${p1}${p2 || '.js'}${p3}`;
+  });
   writeFileSync(filePath, fixed);
 });
 
 // Also fix imports in subdirectories
+// Skip content.js as it's already bundled
 function fixImportsInDir(dir) {
   const entries = readdirSync(dir);
   entries.forEach(entry => {
@@ -101,9 +122,12 @@ function fixImportsInDir(dir) {
     const stat = statSync(entryPath);
     if (stat.isDirectory() && entry !== 'shared' && entry !== 'icons') {
       fixImportsInDir(entryPath);
-    } else if (entry.endsWith('.js')) {
+    } else if (entry.endsWith('.js') && entry !== 'content.js') {
       const content = readFileSync(entryPath, 'utf-8');
-      const fixed = content.replace(/from\s+['"]\.\.\/\.\.\/\.\.\/shared\//g, "from '../../shared/");
+      // Fix paths - add .js only if not already present
+      const fixed = content.replace(/from\s+['"]\.\.\/\.\.\/\.\.\/shared\/([^'"]+?)(\.js)?(['"])/g, (match, p1, p2, p3) => {
+        return `from '../../shared/${p1}${p2 || '.js'}${p3}`;
+      });
       writeFileSync(entryPath, fixed);
     }
   });

@@ -2,8 +2,8 @@
  * Safety analysis service for API
  */
 
-import { SafetyAnalysis, TransactionSimulation } from '../../../shared/types';
-import { analyzeTransactionSafety } from '../../../shared/safetyEngine';
+import { SafetyAnalysis, TransactionSimulation } from '../../../shared/types.js';
+import { analyzeTransactionSafety } from '../../../shared/safetyEngine.js';
 
 /**
  * Analyzes a transaction for safety
