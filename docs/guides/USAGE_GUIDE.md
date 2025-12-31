@@ -1,14 +1,16 @@
 # BlinkGuard Usage Guide
 
+> **Quick Start**: See [QUICKSTART.md](./QUICKSTART.md) for installation and setup instructions.
+
 ## 🎯 What BlinkGuard Does
 
-BlinkGuard automatically scans Twitter/X for **Solana Blinks** (Blockchain Links) and shows safety indicators **before** you click them. It analyzes transactions to detect potential drainers and scams.
+BlinkGuard automatically scans Twitter/X and dial.to for **Solana Blinks** (Blockchain Links) and shows safety indicators **before** you click them. It analyzes transactions to detect potential drainers and scams.
 
 ## 🚀 How It Works
 
 ### Automatic Detection
-1. **You browse Twitter/X** - BlinkGuard runs in the background
-2. **It detects Blinks** - Automatically finds `solana-action:` URLs in tweets
+1. **You browse Twitter/X or dial.to** - BlinkGuard runs in the background
+2. **It detects Blinks** - Automatically finds `solana-action:` URLs in tweets or rendered Blink UI
 3. **It analyzes safety** - Simulates transactions and checks against the registry
 4. **It shows overlays** - Displays colored badges on Blink cards
 
@@ -16,7 +18,7 @@ BlinkGuard automatically scans Twitter/X for **Solana Blinks** (Blockchain Links
 - ✅ Works automatically
 - ✅ No wallet connection needed
 - ✅ No clicks required
-- ✅ Just browse Twitter/X normally
+- ✅ Just browse Twitter/X or dial.to normally
 
 ## 📊 Understanding Safety Overlays
 

@@ -24,6 +24,15 @@ BlinkGuard is an open-source browser extension and API service designed to "pre-
 - **Safety Analysis**: Provides transaction safety scoring
 - **Community Reporting**: Allows users to report suspicious Blinks
 
+## 📚 Documentation
+
+All documentation is organized in the [`docs/`](./docs/) directory:
+- **Technical Docs**: Architecture, API flows, detection processes
+- **Guides**: Usage, quick start, testing
+- **Development**: Debugging, troubleshooting
+
+See [docs/README.md](./docs/README.md) for the complete documentation index.
+
 ## 🚀 Getting Started
 
 ### Prerequisites

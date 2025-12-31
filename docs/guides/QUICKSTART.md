@@ -72,9 +72,10 @@ BlinkGuard/
 
 ## Next Steps
 
-- Read [README.md](README.md) for full documentation
-- Check [ARCHITECTURE.md](ARCHITECTURE.md) for technical details
-- See [CONTRIBUTING.md](CONTRIBUTING.md) to contribute
+- Read [README.md](../../README.md) for full documentation
+- Check [Technical Architecture](../technical/ARCHITECTURE.md) for technical details
+- See [CONTRIBUTING.md](../../CONTRIBUTING.md) to contribute
+- View [Usage Guide](./USAGE_GUIDE.md) for detailed usage instructions
 
 ## Troubleshooting
 
