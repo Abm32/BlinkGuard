@@ -2,7 +2,7 @@
  * Registry check endpoint for Vercel
  */
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { checkUrlInRegistry } from '../src/services/registryService.js';
+import { checkUrlInRegistry } from '../src/services/registryService';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Enable CORS

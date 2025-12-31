@@ -2,7 +2,7 @@
  * Safety analysis endpoint for Vercel
  */
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { analyzeTransaction } from '../api/src/services/safetyService.js';
+import { analyzeTransaction } from '../src/services/safetyService';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Enable CORS

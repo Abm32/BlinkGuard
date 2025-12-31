@@ -26,6 +26,9 @@
   ],
   "author": "BlinkGuard Team",
   "license": "MIT",
+  "engines": {
+    "node": "20.x"
+  },
   "dependencies": {
     "@solana/web3.js": "^1.95.4",
     "@vercel/node": "^3.0.0",
